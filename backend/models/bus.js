@@ -28,6 +28,11 @@ const busSchema = new Schema({
         maxlength: 30
     },
 
+    journeyDate: {
+        type: Date,
+        required: true
+    },
+
     bookedSeats: [{
         type: mongoose.Types.ObjectId,
         ref: 'Ticket'

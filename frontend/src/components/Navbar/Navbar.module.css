@@ -1,0 +1,45 @@
+.RootContainer {
+	width: 300px;
+	height: 100vh;
+	background-color: grey;
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	box-sizing: border-box;
+	padding-left: 1rem;
+}
+
+.IconContainer {
+	font-size: 30px;
+	margin: 20px;
+	vertical-align: middle;
+}
+
+ul {
+	display: flex;
+	flex-direction: column;
+}
+
+ul li {
+	display: inline-block;
+	margin: 10px;
+	font-size: 20px;
+}
+
+li a,
+li > div {
+	text-decoration: none;
+	color: #000;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.LogoutDiv {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+svg {
+	vertical-align: middle;
+	margin-right: 10px;
+}

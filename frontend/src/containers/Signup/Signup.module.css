@@ -1,0 +1,22 @@
+.RootContainer {
+	width: 40%;
+	margin: 10vh auto;
+	background-color: #d6d6d6;
+	padding: 2.5rem;
+}
+
+.RadioButtonsContainer {
+	display: flex;
+	width: 100%;
+	padding: 8px;
+	background-color: #ffffff;
+	margin-bottom: 8px;
+}
+
+.RadioButtonsContainer div {
+	margin-right: 20px;
+}
+
+.RadioButtonsContainer input {
+	margin-right: 5px;
+}
