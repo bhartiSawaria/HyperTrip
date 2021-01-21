@@ -1,14 +1,24 @@
 .RootContainer {
+	margin: auto;
+	position: relative;
+	z-index: 20;
+	text-align: center;
+	display: flex;
+}
+
+.BusInfoContainer {
 	background-color: #ffffff;
 	padding: 2rem;
-	width: 50%;
-	margin: auto;
+	min-width: 55%;
+	margin: auto 4rem auto 10rem;
 }
 
 .StatusContainer {
-	padding: 10px;
+	padding: 15px;
 	display: flex;
 	margin: auto;
+	background-color: #f1f8e9;
+	box-shadow: 2px 2px 2px #d6d6d6;
 }
 
 .StatusContainer > div {
@@ -43,8 +53,16 @@
 }
 
 .DriverSymbol {
-	text-align: right;
+	/* text-align: right; */
 	margin: 20px 10px;
+	/* float: right; */
+	text-align: right;
+}
+
+.DriverSymbol > div,
+.DriverSymbol > div > span {
+	display: inline-block;
+	text-align: center;
 }
 
 .SeatsContainer {
@@ -63,7 +81,7 @@
 	border-radius: 10px;
 }
 
-.RootContainer > button {
+.BusInfoContainer > button {
 	padding: 1rem;
 	width: 50%;
 	margin: 3rem auto;
@@ -73,9 +91,37 @@
 	outline: none;
 }
 
-.RootContainer > button:hover {
+.BusInfoContainer > button:hover {
 	color: #ef5350;
 	background-color: #ffffff;
 	border: 2px solid #ef5350;
 	font-size: 16px;
+}
+
+.TicketBookerInfo {
+	/* height: 100px;
+	width: 100px; */
+	/* background-color: #ffffff; */
+	margin: 20% auto;
+	padding: 1rem;
+	min-width: 25%;
+}
+
+.TicketBookerInfo > p {
+	padding-bottom: 5px;
+	border-bottom: 1px solid grey;
+	background-color: #ef5350;
+	padding: 1rem;
+	border-radius: 20px;
+	color: #ffffff;
+}
+
+.TicketBookerInfo > div {
+	text-align: left;
+}
+
+.TicketBookerInfo > div > p {
+	background-color: #ffffff;
+	padding: 1rem 2rem;
+	border-radius: 20px;
 }

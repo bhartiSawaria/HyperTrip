@@ -1,7 +1,20 @@
 .RootContainer {
-	background: #eee;
+	/* background: #eee; */
+	/* width: 80%;
+	margin: 10vh auto;
+	padding: 4rem 2rem;
+	box-shadow: 2px 2px 2px 2px #d6d6d6; */
+	/* margin: auto; */
 }
 
 .ContentContainer {
+	text-align: right;
 	margin-left: 300px;
+	background: #eee;
+	width: 80%;
+	/* margin: 10vh auto auto 20%; */
+	position: relative;
+	padding: 4rem 2rem;
+	box-shadow: 2px 2px 2px 2px #d6d6d6;
+	min-height: 100vh;
 }

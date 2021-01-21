@@ -26,7 +26,7 @@ const bus = (props) => {
                 </div>
                 <div>
                     <div className={classes.PriceDiv}> ₹ 240</div>
-                    <button>Book now</button>
+                    <button onClick={props.showBackdropHandler}>Book now</button>
                 </div>
             </div>
         </div>

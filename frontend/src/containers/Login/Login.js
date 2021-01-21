@@ -57,7 +57,7 @@ class Login extends Component{
                 else{
                     this.props.setStatusToLogin(result.userDetails, result.token);
                     console.log('Login result', result);
-                    this.props.history.push('/');
+                    this.props.history.push('/dashboard');
                 }
             }) 
             .catch(err => {

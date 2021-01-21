@@ -1,0 +1,40 @@
+.RootContainer {
+	text-align: center;
+}
+
+.RootContainer > header {
+	width: 70%;
+	display: flex;
+	background-color: #ffffff;
+	margin: auto;
+	align-items: center;
+	justify-content: space-evenly;
+	padding: 1rem;
+	margin-bottom: 2.5rem;
+	cursor: pointer;
+}
+
+.RootContainer > header > div {
+	/* margin: auto px; */
+	/* width: 50%; */
+}
+
+/* .RootContainer > header > div:nth-of-type(2),
+.RootContainer > header > div:nth-of-type(3) {
+	border-left: 1px solid grey;
+} */
+
+.RootContainer > header > div > svg {
+	align-self: start;
+}
+
+.RootContainer > header > div > svg,
+.RootContainer > header > div > h2 {
+	display: inline-block;
+	margin: 0px 10px;
+	vertical-align: middle;
+}
+
+.RootContainer > header > div > h2 {
+	font-weight: lighter;
+}

@@ -7,19 +7,21 @@ import Navbar from './components/Navbar/Navbar';
 import Signup from './containers/Signup/Signup';
 import Login from './containers/Login/Login';
 import Error from './components/Error/Error';
+import MainSection from './containers/MainSection/MainSection';
+import BusDetails from './containers/BusDetails/BusDetails';
 import HomePage from './containers/HomePage/HomePage';
 
 import * as actionCreators from './actions/index';
 import classes from './App.module.css';
 
 class App extends Component{
-  
+
   componentDidMount(){
     const token = localStorage.getItem('token');
     const userDetails = JSON.parse(localStorage.getItem('userDetails'));
     if( token && userDetails ){
       this.props.setStatusToLogin(userDetails, token);
-      this.props.history.push('/');
+      this.props.history.push('/dashboard');
     }
   }
 
@@ -27,7 +29,6 @@ class App extends Component{
     this.props.setStatusToLogout();
     this.props.history.push('/');
   }
-
 
   render(){
     return (
@@ -38,6 +39,8 @@ class App extends Component{
             <Switch>
               <Route exact path='/signup' component={Signup}/>
               <Route exact path='/login' component={Login} />
+              <Route exact path='/bus-details' component={BusDetails} />
+              <Route exact path='/dashboard' component={MainSection} />
               <Route exact path='/error' component={Error} />
               <Route path='/' component={HomePage} />
             </Switch>
