@@ -1,8 +1,13 @@
 .RootContainer {
-	width: 70%;
+	width: 100%;
 	background-color: #eee;
-	margin: auto;
+
 	padding: 2rem 0;
+}
+
+.FormContainer {
+	width: 70%;
+	margin: auto;
 }
 
 .InputContainer {
@@ -25,7 +30,7 @@
 	margin-left: 12px;
 }
 
-.RootContainer > button {
+.FormContainer > button {
 	padding: 1rem;
 	width: 50%;
 	margin: 1rem auto;
@@ -35,9 +40,22 @@
 	outline: none;
 }
 
-.RootContainer > button:hover {
+.FormContainer > button:hover {
 	color: #ef5350;
 	background-color: #ffffff;
 	border: 2px solid #ef5350;
 	font-size: 16px;
+}
+
+.SearchResultsContainer {
+	/* background-color: red; */
+	margin-top: 50px;
+}
+.SearchResultsContainer > header {
+	font-size: 20px;
+	/* text-align: left; */
+}
+
+.SearchResultsContainer > header > hr {
+	width: 50%;
 }

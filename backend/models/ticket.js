@@ -8,19 +8,13 @@ const ticketSchema = new Schema({
         type: Number,
         required: true
     },
-    owner: {
+    bookedBy: {
         type: mongoose.Types.ObjectId,
         ref: 'User'
-    },
-    isBooked: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-    fare: {
-        type: Number,
-        required: true,
-        default: 100
+    }, 
+    busInfo: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Bus'
     }
 });
 

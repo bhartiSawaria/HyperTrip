@@ -52,7 +52,7 @@ const fetcher = async(path, method, body = null, isFormData = false) => {
        return finalResult;
     }
     catch(error){
-        result.isError = true;
+        console.log('Error is', error);
         return result;
     } 
 }

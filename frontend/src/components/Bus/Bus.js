@@ -5,7 +5,7 @@ import classes from './Bus.module.css';
 
 const bus = (props) => {
     return (
-        <div className={classes.RootContainer}>
+        <div className={classes.RootContainer} onClick={props.clicked}>
             <div className={classes.UpperContainer}>
                 <div>
                     <h2>Departure On </h2>
@@ -21,8 +21,8 @@ const bus = (props) => {
             </div>
             <div className={classes.LowerContainer}>
                 <div>
-                    <div><span />Jamunanagar <p>start</p></div>
-                    <div><span />Ahmedabad <p> end</p></div>
+                    <div><span />{props.bus.startCity} <p>start</p></div>
+                    <div><span />{props.bus.endCity} <p> end</p></div>
                 </div>
                 <div>
                     <div className={classes.PriceDiv}> ₹ 240</div>

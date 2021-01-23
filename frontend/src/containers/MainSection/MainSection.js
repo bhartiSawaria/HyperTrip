@@ -6,15 +6,37 @@ import { BiPlus } from 'react-icons/bi';
 
 import Bus from '../../components/Bus/Bus';
 import SearchForm from '../SearchForm/SearchForm';
-import classes from './MainSection.module.css';
 import AddBusForm from '../AddBusForm/AddBusForm';
+import classes from './MainSection.module.css';
+import fetcher from '../../fetchWrapper';
+import bus from '../../components/Bus/Bus';
 
 class MainSection extends Component{
 
     state = {
         onSearchSection: true,
         onViewAllSection: false,
-        onAddBusSection: false
+        onAddBusSection: false,
+        allBuses: []
+    }
+
+    componentDidMount(){
+        this.fetchAllBuses();
+    }
+
+    fetchAllBuses = async() => {
+        let path;
+        if(this.props.userInfo && this.props.userInfo.isAdmin)
+            path = '/admin-buses?isAdmin=true';
+        else
+            path = '/buses';
+        const result = await fetcher(path, 'GET');
+        console.log(result);                            //remove later
+        if(!result.success){
+            console.log(result);
+            this.props.history.push('/error');
+        }
+        this.setState({allBuses: result.buses});
     }
 
     searchSectionActiveHandler = () => {
@@ -41,14 +63,27 @@ class MainSection extends Component{
         })
     }
 
+    redirectToBusDetails = (bus) => {
+        this.props.history.push({
+            pathname: '/bus-details/' + bus._id,
+            data: bus
+        })
+        // console.log(this.props);
+    }
+
     render(){
 
         const searchSection = this.state.onSearchSection ? <SearchForm /> : null;
 
-        const viewAllSection = this.state.onViewAllSection ? <Bus 
-            showBackdropHandler = {this.showBackdropHandler}/> : null;
+        const buses = this.state.allBuses.map(bus => {
+            return <Bus key={bus._id} bus={bus} clicked={() => this.redirectToBusDetails(bus)}/>
+        })
 
-        const addBusSection = this.state.onAddBusSection ? <AddBusForm /> : null;
+        const viewAllSection = this.state.onViewAllSection ? buses : null;
+
+        const addBusSection = this.state.onAddBusSection ? <AddBusForm 
+            isAdmin={this.props.userInfo.isAdmin}
+            viewAll={this.viewAllSectionActiveHandler}/> : null;
 
         return (
             <div className={classes.RootContainer}>

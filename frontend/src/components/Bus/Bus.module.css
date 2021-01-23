@@ -1,9 +1,9 @@
 .RootContainer {
 	background-color: #ffffff;
-	width: 45%;
+	width: 55%;
 	padding: 2rem;
 	justify-content: left;
-	margin: auto;
+	margin: 20px auto;
 }
 
 .UpperContainer {

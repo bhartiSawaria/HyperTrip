@@ -1,11 +1,91 @@
 
 import React, { Component } from 'react';
 import { FaBity } from "react-icons/fa";
+import { connect } from 'react-redux';
 
+import fetcher from '../../fetchWrapper';
 import classes from './BusDetails.module.css';
 
-class SeatsDetail extends Component {
+class BusDetails extends Component {
+
+    state = {
+        busId: this.props.match.params.busId,
+        bookedSeats: [],
+        selectedSeats: []
+    }
+
+    componentDidMount(){
+        this.getBusDetails();
+    }
+
+    getBusDetails = async() => {
+        const busId = this.state.busId;
+        const result = await fetcher('/booked-seats/' + busId, 'GET');
+        console.log(result);                                            // remove later
+        if(!result.success){
+            return this.props.history.push('/error');
+        }
+        this.setState({bookedSeats: result.bookedSeats});
+    }
+
+    seatClickHandler = (event) => {
+        console.log(event.target.className);
+        console.log(event.target.id);
+        if(this.props.isAdmin){
+
+        }
+        else{
+            if(event.target.className.includes('Indigo')){
+                event.target.className = classes.Blue;
+                const updatedSelectedSeats = [...this.state.selectedSeats];
+                updatedSelectedSeats.push(event.target.id);
+                this.setState({selectedSeats: updatedSelectedSeats}, () => console.log(this.state));
+            }
+            else if(event.target.className.includes('Blue')){
+                event.target.className = classes.Indigo;;
+                const updatedSelectedSeats = [...this.state.selectedSeats];
+                const index = updatedSelectedSeats.indexOf(event.target.id);
+                updatedSelectedSeats.splice(index, 1);
+                this.setState({selectedSeats: updatedSelectedSeats}, () => console.log(this.state));
+            }
+        }
+    }
+
+    buyTicketHandler = async() => {
+        if(this.state.selectedSeats.length === 0)
+            return;
+        const body = {
+            busId: this.state.busId,
+            selectedSeats: [...this.state.selectedSeats]
+        };
+        const result = await fetcher('/book-ticket', 'POST', JSON.stringify(body));
+        console.log(result);                                        // remove later
+        if(!result.success){
+           return this.props.history.push('/error');
+        }
+        this.props.history.push('/dashboard');
+    }
+
     render(){
+
+        const seatsContainer = [];
+        let j = 1;
+        for(let i=1; i<=48; i++){
+            if(i % 3 == 0 && i % 2 != 0)
+                seatsContainer.push(<span key={i} className={classes.BlankSeat}></span>)
+            else{
+                let divClass = this.state.bookedSeats.includes(j) ? classes.Grey : classes.Indigo; 
+                seatsContainer.push(
+                    <div 
+                        key={i} 
+                        id={j}
+                        className={divClass}
+                        onClick={this.seatClickHandler}>{j}</div>
+                );
+                j++;
+            }
+        }
+
         return(
             <div className={classes.RootContainer}>
                 <div className={classes.BusInfoContainer}>
@@ -19,10 +99,14 @@ class SeatsDetail extends Component {
                             <span className={classes.Grey} />
                             <p>Reserved</p>
                         </div>
-                        <div>
-                            <span className={classes.Blue} />
-                            <p>Selected</p>
-                        </div>
+
+                        {!this.props.isAdmin ? (
+                            <div>
+                                <span className={classes.Blue} />
+                                <p>Selected</p>
+                            </div>
+                        ): null}
+                        
                     </div>
                     <div className={classes.DriverSymbol}>
                         <div>
@@ -31,80 +115,47 @@ class SeatsDetail extends Component {
                         </div>
                     </div>
                     <div className={classes.SeatsContainer}>
-                        <div>1</div>
-                        <div>2</div>
-                        <div></div>
-                        <div>3</div>
-                        <div>4</div>
-                        <div>5</div>
-
-                        <div>6</div>
-                        <div>7</div>
-                        <div></div>
-                        <div>8</div>
-                        <div>9</div>
-                        <div>10</div>
-
-                        <div>11</div>
-                        <div>12</div>
-                        <div></div>
-                        <div>13</div>
-                        <div>14</div>
-                        <div>15</div>
-
-                        <div>16</div>
-                        <div>17</div>
-                        <div></div>
-                        <div>18</div>
-                        <div>19</div>
-                        <div>20</div>
-
-                        <div>21</div>
-                        <div>22</div>
-                        <div></div>
-                        <div>23</div>
-                        <div>24</div>
-                        <div>25</div>
-
-                        <div>26</div>
-                        <div>27</div>
-                        <div></div>
-                        <div>28</div>
-                        <div>29</div>
-                        <div>30</div>
-
-                        <div>31</div>
-                        <div>32</div>
-                        <div></div>
-                        <div>33</div>
-                        <div>34</div>
-                        <div>35</div>
-
-                        <div>36</div>
-                        <div>37</div>
-                        <div></div>
-                        <div>38</div>
-                        <div>39</div>
-                        <div>40</div>
-                    </div>
-                    <button>
-                        {this.props.isAdmin ? 'Reset' : 'Buy'}
-                    </button>
-                </div>
-                <div className={classes.TicketBookerInfo}>
-                    <p>
-                        Booked By
-                    </p>
-                    <div>
-                        <p>Name:  Bharti</p>
-                        <p>E-mail:  bhartisawaria71@gmail.com</p>
-                        <p>Gender:  Female</p>
-                        <p>Phone no:  1234567890</p>
+                        {seatsContainer}
                     </div>
                 </div>
+                {this.props.isAdmin ? (
+                    <div className={classes.TicketBookerInfo}>
+                        <p>
+                            Booked By
+                        </p>
+                        <div>
+                            <p>Name:  Bharti</p>
+                            <p>E-mail:  bhartisawaria71@gmail.com</p>
+                            <p>Gender:  Female</p>
+                            <p>Phone no:  1234567890</p>
+                        </div>
+                    </div>
+                ) : null}
+                {!this.props.isAdmin ? (
+                    <div className={classes.TicketBookerInfo}>
+                        <h2>
+                            Details
+                        </h2>
+                        <div>
+                            <p>Name:  {this.props.userInfo.name}</p>
+                            <p>Seats: {this.state.selectedSeats.length}</p>
+                            <p>Amount: 250</p>
+                        </div>
+                        <button onClick={this.buyTicketHandler}>
+                            {this.props.isAdmin ? 'Reset' : 'Buy'}
+                        </button>
+                    </div>
+                ) : null}    
             </div>
         )
     }
 }
 
-export default SeatsDetail;
+const mapStateToProps = state => {
+    return {
+      userInfo: state.auth.userDetails
+    }
+  }
+  
+
+export default connect(mapStateToProps)(BusDetails);

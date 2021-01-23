@@ -18,7 +18,7 @@ exports.postSignup = async(req, res, next) => {
 
     const name = req.body.name;
     const email = req.body.email;
-    const phoneNo = req.body.phoneNo;
+    const phoneNo = parseInt(req.body.phoneNo);
     const gender = req.body.gender;
     const password = req.body.password;
     const isAdmin = req.body.isAdmin === 'true' ? true : false;

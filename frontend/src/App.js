@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Navbar from './components/Navbar/Navbar';
@@ -28,19 +28,21 @@ class App extends Component{
   logoutHandler = () => {
     this.props.setStatusToLogout();
     this.props.history.push('/');
+    <Redirect to='/'/>
   }
 
   render(){
+    const isAuth = this.props.isAuth;
     return (
       <BrowserRouter>
         <div className={classes.RootContainer}>
-          <Navbar isAuth={this.props.isAuth} logoutHandler={this.logoutHandler} userInfo={this.props.userInfo}/>
+          <Navbar isAuth={isAuth} logoutHandler={this.logoutHandler} userInfo={this.props.userInfo}/>
           <div className={classes.ContentContainer}>
             <Switch>
-              <Route exact path='/signup' component={Signup}/>
-              <Route exact path='/login' component={Login} />
-              <Route exact path='/bus-details' component={BusDetails} />
-              <Route exact path='/dashboard' component={MainSection} />
+              {!isAuth ? <Route exact path='/signup' component={Signup}/> : null }
+              {!isAuth ? <Route exact path='/login' component={Login} /> : null }
+              {isAuth ? <Route exact path='/dashboard' component={MainSection} /> : null }
+              {isAuth ? <Route path='/bus-details/:busId' component={BusDetails} isAdmin={this.props.userInfo.isAdmin} /> : null }
               <Route exact path='/error' component={Error} />
               <Route path='/' component={HomePage} />
             </Switch>

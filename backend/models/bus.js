@@ -36,7 +36,13 @@ const busSchema = new Schema({
     bookedSeats: [{
         type: mongoose.Types.ObjectId,
         ref: 'Ticket'
-    }]
+    }],
+
+    createdBy: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
 
 module.exports = mongoose.model('Bus', busSchema);

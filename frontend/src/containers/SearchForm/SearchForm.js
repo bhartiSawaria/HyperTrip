@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { BsCursor } from "react-icons/bs";
 import { GoLocation } from "react-icons/go";
 import { MdDateRange } from "react-icons/md";
 
+import Bus from '../../components/Bus/Bus';
+import fetcher from '../../fetchWrapper';
 import classes from './SearchForm.module.css';
 
 class SearchForm extends Component{
 
     state = {
-        startLocation: '',
-        endLocation: '',
-        journeyDate: ''
+        startCity: '',
+        endCity: '',
+        journeyDate: '',
+        searchResults: [],
+        errorMessage: '',
+        isSearched: false
     }
 
     inputChangeHandler = (event) => {
@@ -19,40 +25,86 @@ class SearchForm extends Component{
         });
     }
 
+    isFromValid = () => {
+        const { startCity, endCity, journeyDate } = this.state;
+        return startCity.trim().length || endCity.trim().length || journeyDate.trim().length;
+    }
+
+    fromSubmitHandler = async() => {
+        if(!this.isFromValid()){
+            return;
+        }
+        const { startCity, endCity, journeyDate } = this.state;
+        const body = JSON.stringify({
+            startCity: startCity,
+            endCity: endCity,
+            journeyDate: journeyDate
+        });
+        const result = await fetcher('/search-bus', 'POST', body);
+        console.log(result);                                        // remove later
+        if(!result.success){
+            this.props.history.push('/error');
+        }
+        this.setState({searchResults: result.buses, isSearched: true});
+    }
+
     render(){
+
+        let searchResults = null;
+        if(this.state.isSearched){
+            const searchedBuses = this.state.searchResults.map(bus => {
+                return <Bus key={bus._id} bus={bus}/>
+            });
+
+            searchResults = (
+                <div className={classes.SearchResultsContainer}>
+                    <header>
+                        Search results
+                        <hr />
+                    </header>
+                    <div>
+                        {searchedBuses}
+                    </div>
+                </div>
+            )
+        }
+
         return(
             <div className={classes.RootContainer}>
-                <div className={classes.InputContainer}>
-                    <BsCursor size={20}/>
-                    <input 
-                        type='text'
-                        name='startLocation'
-                        placeholder='Start Location'
-                        value={this.state.startLocation}
-                        onChange={this.inputChangeHandler} />
+                <div className={classes.FormContainer}>
+                    <div className={classes.InputContainer}>
+                        <BsCursor size={20}/>
+                        <input 
+                            type='text'
+                            name='startCity'
+                            placeholder='Start City'
+                            value={this.state.startCity}
+                            onChange={this.inputChangeHandler} />
+                    </div>
+                    <div className={classes.InputContainer}>
+                        <GoLocation size={20}/>
+                        <input 
+                            type='text'
+                            name='endCity'
+                            placeholder='End City'
+                            value={this.state.endCity}
+                            onChange={this.inputChangeHandler} />
+                    </div>
+                    <div className={classes.InputContainer}>
+                        <MdDateRange size={20} />
+                        <input 
+                            type='text'
+                            name='journeyDate'
+                            placeholder='Date'
+                            value={this.state.journeyDate}
+                            onChange={this.inputChangeHandler} />
+                    </div>
+                    <button onClick={this.fromSubmitHandler}>Search</button>
                 </div>
-                <div className={classes.InputContainer}>
-                    <GoLocation size={20}/>
-                    <input 
-                        type='text'
-                        name='endLocation'
-                        placeholder='End Location'
-                        value={this.state.endLocation}
-                        onChange={this.inputChangeHandler} />
-                </div>
-                <div className={classes.InputContainer}>
-                    <MdDateRange size={20} />
-                    <input 
-                        type='text'
-                        name='journeyDate'
-                        placeholder='Date'
-                        value={this.state.journeyDate}
-                        onChange={this.inputChangeHandler} />
-                </div>
-                <button>Search</button>
+                {searchResults}
             </div>
         )
     }
 }
 
-export default SearchForm;
+export default withRouter(SearchForm);

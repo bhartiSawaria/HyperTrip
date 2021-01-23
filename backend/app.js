@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+const busRoutes = require('./routes/bus');
+const ticketRoutes = require('./routes/ticket');
 const adminRoutes = require('./routes/admin');
 
 const { MONGODB_URI } = require('./keyInfo');
@@ -21,10 +22,12 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use(authRoutes);
-app.use(userRoutes);
+app.use(busRoutes);
+app.use(ticketRoutes);
 app.use(adminRoutes);
 
 app.use((error, req, res, next) => {
+    console.log('Error occured', error);
     const status = error.statusCode || 500;
     const message = error.message;
     const data = error.data;
@@ -35,7 +38,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
     app.listen(8080);
     console.log('Connected!');
