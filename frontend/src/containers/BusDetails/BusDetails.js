@@ -10,8 +10,15 @@ class BusDetails extends Component {
 
     state = {
         busId: this.props.match.params.busId,
+        bus: this.props.location.data.bus,
         bookedSeats: [],
-        selectedSeats: []
+        bookedSeatNumbers: [],
+        selectedSeats: [],
+        bookedBy: {},
+        isBooked: false,
+        hideUserDetails: true,
+        clickedSeat: '',
+        showMsg: false
     }
 
     componentDidMount(){
@@ -25,14 +32,24 @@ class BusDetails extends Component {
         if(!result.success){
             return this.props.history.push('/error');
         }
-        this.setState({bookedSeats: result.bookedSeats});
+        const bookedSeatNumbers = result.bookedSeats.map(seat => seat.number);
+        this.setState({bookedSeatNumbers: bookedSeatNumbers, bookedSeats: result.bookedSeats});
     }
 
-    seatClickHandler = (event) => {
-        console.log(event.target.className);
-        console.log(event.target.id);
-        if(this.props.isAdmin){
-
+    seatClickHandler = async(event) => {
+        const id = event.target.id;
+        this.setState({hideUserDetails: false, clickedSeat: id});
+        if(this.props.userInfo && this.props.userInfo.isAdmin){
+            if(event.target.className.includes('Grey')){
+                this.state.bookedSeats.forEach(seat => {
+                    if(seat.number == id){
+                        this.setState({bookedBy: {...seat.bookedBy}, isBooked: true});
+                    }
+                });
+            }
+            else{
+                this.setState({isBooked: false});
+            }
         }
         else{
             if(event.target.className.includes('Indigo')){
@@ -63,7 +80,21 @@ class BusDetails extends Component {
         if(!result.success){
            return this.props.history.push('/error');
         }
-        this.props.history.push('/dashboard');
+        // this.props.history.push('/dashboard');
+        this.setState({showMsg: true});
+    }
+
+    resetBus = async() => {
+        const result = await fetcher('/reset', 'POST', JSON.stringify({
+            busId: this.state.busId,
+            isAdmin: this.props.userInfo.isAdmin
+        }));
+        console.log(result);                                        // remove later
+        if(!result.success){
+            return this.props.history.push('/error');
+         }
+        //  this.props.history.push('/dashboard');
+        
     }
 
     render(){
@@ -74,7 +105,7 @@ class BusDetails extends Component {
             if(i % 3 == 0 && i % 2 != 0)
                 seatsContainer.push(<span key={i} className={classes.BlankSeat}></span>)
             else{
-                let divClass = this.state.bookedSeats.includes(j) ? classes.Grey : classes.Indigo; 
+                let divClass = this.state.bookedSeatNumbers.includes(j) ? classes.Grey : classes.Indigo; 
                 seatsContainer.push(
                     <div 
                         key={i} 
@@ -96,11 +127,11 @@ class BusDetails extends Component {
                             <p>Available</p>
                         </div>
                         <div>
-                            <span className={classes.Grey} />
+                            <span className={classes.Grey} style={{backgroundColor: '#d6d6d6'}}/>
                             <p>Reserved</p>
                         </div>
 
-                        {!this.props.isAdmin ? (
+                        {!(this.props.userInfo && this.props.userInfo.isAdmin) ? (
                             <div>
                                 <span className={classes.Blue} />
                                 <p>Selected</p>
@@ -117,33 +148,48 @@ class BusDetails extends Component {
                     <div className={classes.SeatsContainer}>
                         {seatsContainer}
                     </div>
+                    {(this.props.userInfo && this.props.userInfo.isAdmin) ? (
+                        <button onClick={this.resetBus}>
+                            Reset        
+                        </button>
+                    ) : null}
+                    
                 </div>
-                {this.props.isAdmin ? (
-                    <div className={classes.TicketBookerInfo}>
-                        <p>
-                            Booked By
-                        </p>
-                        <div>
-                            <p>Name:  Bharti</p>
-                            <p>E-mail:  bhartisawaria71@gmail.com</p>
-                            <p>Gender:  Female</p>
-                            <p>Phone no:  1234567890</p>
-                        </div>
+                {(this.props.userInfo && this.props.userInfo.isAdmin) && !(this.state.hideUserDetails)? (
+                    <div className={classes.PersonDetailsContainer}>
+                        <p className={classes.SeatNumber}>{this.state.clickedSeat}</p>
+                        {this.state.isBooked ? (
+                            <div className={classes.PersonDetails}>
+                                <p>Booked By</p>
+                                <hr />
+                                <div>
+                                    <p>Name:  {this.state.bookedBy.name}</p>
+                                    <p>E-mail:  {this.state.bookedBy.email}</p>
+                                    <p>Gender:  {this.state.bookedBy.gender}</p>
+                                    <p>Phone no:  {this.state.bookedBy.phoneNo}</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <h2>Not Booked</h2>
+                        )}
+                        
                     </div>
                 ) : null}
-                {!this.props.isAdmin ? (
-                    <div className={classes.TicketBookerInfo}>
+                {!(this.props.userInfo && this.props.userInfo.isAdmin) ? (
+                    <div className={classes.TicketBookerInfoContainer}>
                         <h2>
                             Details
                         </h2>
                         <div>
-                            <p>Name:  {this.props.userInfo.name}</p>
-                            <p>Seats: {this.state.selectedSeats.length}</p>
-                            <p>Amount: 250</p>
+                            <p>₹ {300 * this.state.selectedSeats.length}</p>
+                            <p> {this.props.userInfo.name}</p>
+                            <p>Seats: {this.state.selectedSeats.length}  </p>
                         </div>
                         <button onClick={this.buyTicketHandler}>
-                            {this.props.isAdmin ? 'Reset' : 'Buy'}
+                            Buy
                         </button>
+                        {this.state.showMsg ? <p
+                        style={{marginTop: '15px', color: 'green'}}>Booked Successfully</p> : null}
                     </div>
                 ) : null}    
             </div>
@@ -159,3 +205,4 @@ const mapStateToProps = state => {
   
 
 export default connect(mapStateToProps)(BusDetails);
+

@@ -1,6 +1,7 @@
 
 const busUtils = require('../database/bus');
 const userUtils = require('../database/user');
+const ticketUtils = require('../database/ticket');
 
 exports.postAddBus = async(req, res, next) => {
 
@@ -10,6 +11,9 @@ exports.postAddBus = async(req, res, next) => {
             number: req.body.number,
             startCity: req.body.startCity,
             endCity: req.body.endCity,
+            fare: req.body.fare,
+            departureTime: req.body.departureTime,
+            arrivalTime: req.body.arrivalTime,
             journeyDate: req.body.journeyDate,
             createdBy: req.userId
         }
@@ -44,5 +48,19 @@ exports.getBuses = async(req, res, next) => {
 }
 
 exports.postReset = async(req, res, next) => {
-    
+    try{
+        const busId = req.body.busId;
+        const busToReset = await busUtils.findBusById(busId);
+        if(!busToReset)
+            throw new Error('Some db error');
+        await ticketUtils.deleteManyTickets(busToReset.bookedSeats);
+        res.status(200).json({
+            message: 'Bus is resetted successfully',
+            success: true
+        });
+    }
+    catch(error){
+        error.setStatus = 500;    
+        next(error);
+    }
 }

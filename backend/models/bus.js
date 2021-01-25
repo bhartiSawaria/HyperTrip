@@ -33,6 +33,21 @@ const busSchema = new Schema({
         required: true
     },
 
+    fare: {
+        type: Number,
+        required: true
+    },
+
+    departureTime: {
+        type: String,
+        required: true
+    },
+
+    arrivalTime: {
+        type: String,
+        required: true
+    },
+
     bookedSeats: [{
         type: mongoose.Types.ObjectId,
         ref: 'Ticket'

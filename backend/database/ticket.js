@@ -10,3 +10,13 @@ exports.createMany = async(tickets) => {
         error.message = 'Some db error!';
     }
 }
+
+exports.deleteManyTickets = async(tickets) => {
+    try{
+        await Ticket.deleteMany({_id: {$in: tickets}});
+        return;
+    }
+    catch(error){
+        error.message = 'Some db error!';
+    }
+}

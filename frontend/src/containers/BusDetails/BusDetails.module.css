@@ -44,12 +44,33 @@
 	background-color: #7986cb;
 }
 
+.Indigo:hover {
+	background-color: #ffffff;
+	color: #7986cb;
+	border: 2px solid #7986cb;
+	font-weight: bold;
+}
+
 .Grey {
-	background-color: #bdbdbd;
+	background-color: #eee;
+}
+
+.Grey:hover {
+	background-color: #ffffff;
+	border: 2px solid #eee;
+	color: #eee;
+	font-weight: bold;
 }
 
 .Blue {
 	background-color: #40c4ff;
+}
+
+.Blue:hover {
+	background-color: #ffffff;
+	border: 2px solid #40c4ff;
+	color: #40c4ff;
+	font-weight: bold;
 }
 
 .BlankSeat {
@@ -85,9 +106,87 @@
 	cursor: pointer;
 }
 
-.TicketBookerInfo > button {
-	padding: 1rem;
+.BusInfoContainer > button {
+	width: 50%;
+}
+
+.PersonDetailsContainer {
+	background-color: #ffffff;
+	text-align: center;
+	padding: 2rem 1rem;
+	min-width: 25%;
+	/* margin: 20% auto 50px auto; */
+	margin: auto;
+	padding-bottom: 3rem;
+}
+
+.PersonDetailsContainer > div > p {
+	background-color: #ffffff;
+	padding: 1rem 2rem;
+	border-radius: 20px;
+}
+
+.PersonDetailsContainer h2 {
+	font-size: 20px;
+}
+
+.PersonDetailsContainer > button {
 	width: 100%;
+}
+
+.SeatNumber {
+	font-size: 100px;
+	height: 120px;
+	padding: 0;
+	margin: 0;
+}
+
+.PersonDetails {
+	margin-top: 2rem;
+}
+
+.PersonDetails > p {
+	font-size: 20px;
+	text-align: center;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.PersonDetails > div {
+	text-align: left;
+	padding-left: 2rem;
+	font-size: 16px;
+	margin-top: 2rem;
+}
+
+.TicketBookerInfoContainer {
+	background-color: #ffffff;
+	text-align: center;
+	padding: 2rem 1rem;
+	min-width: 25%;
+	margin: auto;
+	padding-bottom: 3rem;
+}
+
+.TicketBookerInfoContainer > div {
+	text-align: left;
+	margin: 20px;
+	font-size: 16px;
+}
+
+.TicketBookerInfoContainer > div > p {
+	margin-bottom: 8px;
+}
+
+.TicketBookerInfoContainer > div > p:first-of-type {
+	float: right;
+	font-size: 40px;
+}
+
+.BusInfoContainer > button,
+.PersonDetailsContainer > button,
+.TicketBookerInfoContainer > button {
+	padding: 1rem;
 	margin: 3rem auto;
 	border-radius: 25px;
 	background-color: #ef5350;
@@ -95,36 +194,16 @@
 	outline: none;
 }
 
-.TicketBookerInfo > button:hover {
+.BusInfoContainer > button:hover,
+.PersonDetailsContainer > button:hover,
+.TicketBookerInfoContainer > button:hover {
 	color: #ef5350;
 	background-color: #ffffff;
 	border: 2px solid #ef5350;
 	font-size: 16px;
 }
 
-.TicketBookerInfo {
-	/* height: 100px;
-	width: 100px; */
-	/* background-color: #ffffff; */
-	margin: 20% auto;
-	padding: 1rem;
-	min-width: 25%;
-}
-
-.TicketBookerInfo > p {
-	padding-bottom: 5px;
-	border-bottom: 1px solid grey;
-	/* background-color: grey; */
-	padding: 1rem;
-	border-radius: 20px;
-}
-
-.TicketBookerInfo > div {
-	text-align: left;
-}
-
-.TicketBookerInfo > div > p {
-	background-color: #ffffff;
-	padding: 1rem 2rem;
-	border-radius: 20px;
+.TicketBookerInfoContainer > button {
+	width: 80%;
+	margin: 15px 0px 0px 0px;
 }

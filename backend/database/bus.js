@@ -3,11 +3,13 @@ const Bus = require('../models/bus');
 
 exports.createBus = async(busDetails) => {
     try{
-        const createdBus = await new Bus(busDetails);
-        return await createdBus.save();
+        let createdBus = await new Bus(busDetails);
+        createdBus = await createdBus.save();
+        return createdBus;
     }
     catch(error){
         error.message = 'Some db error!';
+        console.log(error);
     }
 }
 
@@ -83,7 +85,7 @@ exports.findBusBySpecificFields = async(startCity, endCity, journeyDate) => {
 
 exports.findBusById = async(busId) => {
     try{
-        const bus = await Bus.findById(busId).populate('bookedSeats').exec();
+        const bus = await Bus.findById(busId).populate({path:'bookedSeats', populate: ('bookedBy')}).exec();
         return bus;
     }
     catch(error){

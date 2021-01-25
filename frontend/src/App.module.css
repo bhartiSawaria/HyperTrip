@@ -1,20 +1,21 @@
 .RootContainer {
-	/* background: #eee; */
-	/* width: 80%;
-	margin: 10vh auto;
-	padding: 4rem 2rem;
-	box-shadow: 2px 2px 2px 2px #d6d6d6; */
-	/* margin: auto; */
+	padding: 0;
+	margin: 0;
+	background-color: grey;
+	min-height: 92vh;
+	width: 100%;
 }
 
 .ContentContainer {
+	background-color: #eee;
 	text-align: right;
-	margin-left: 300px;
-	background: #eee;
+	margin-left: 280px;
+	margin-top: 8vh;
 	width: 80%;
-	/* margin: 10vh auto auto 20%; */
 	position: relative;
 	padding: 2rem;
-	box-shadow: 2px 2px 2px 2px #d6d6d6;
 	min-height: 100vh;
+	box-sizing: border-box;
+	float: right;
+	box-shadow: -15px -15px 15px -8px rgba(0, 0, 0, 0.5);
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { BsCursor } from "react-icons/bs";
 import { GoLocation } from "react-icons/go";
 import { MdDateRange } from "react-icons/md";
@@ -48,12 +49,23 @@ class SearchForm extends Component{
         this.setState({searchResults: result.buses, isSearched: true});
     }
 
+    redirectToBusDetails = (bus) => {
+        this.props.history.push({
+            pathname: '/bus-details/' + bus._id,
+            data: bus
+        })
+    }
+
     render(){
 
         let searchResults = null;
         if(this.state.isSearched){
             const searchedBuses = this.state.searchResults.map(bus => {
-                return <Bus key={bus._id} bus={bus}/>
+                return <Bus 
+                            key={bus._id} 
+                            bus={bus} 
+                            clicked={() => this.redirectToBusDetails(bus)}
+                            isAdmin={this.props.userInfo.isAdmin}/>
             });
 
             searchResults = (
@@ -93,11 +105,12 @@ class SearchForm extends Component{
                     <div className={classes.InputContainer}>
                         <MdDateRange size={20} />
                         <input 
-                            type='text'
+                            type='Date'
                             name='journeyDate'
                             placeholder='Date'
                             value={this.state.journeyDate}
-                            onChange={this.inputChangeHandler} />
+                            onChange={this.inputChangeHandler}
+                            style={{color:'grey', outline:'none'}} />
                     </div>
                     <button onClick={this.fromSubmitHandler}>Search</button>
                 </div>
@@ -107,4 +120,10 @@ class SearchForm extends Component{
     }
 }
 
-export default withRouter(SearchForm);
+const mapStateToProps = state => {
+    return {
+      userInfo: state.auth.userDetails
+    }
+  }
+
+export default connect(mapStateToProps)(withRouter(SearchForm));

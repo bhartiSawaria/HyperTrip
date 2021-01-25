@@ -46,13 +46,11 @@ exports.getBookedSeats = async(req, res, next) => {
         if(!bus){
             throw new Error('Some db error');
         }
-        const bookedSeats = bus.bookedSeats.map(seat => {
-            return seat.number;
-        });
+        
         res.status(200).json({
             message: 'Seats fetched successfully',
             success: true,
-            bookedSeats: bookedSeats
+            bookedSeats: bus.bookedSeats
         });
     }
     catch(error){

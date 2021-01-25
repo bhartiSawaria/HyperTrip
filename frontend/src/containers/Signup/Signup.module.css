@@ -1,8 +1,15 @@
 .RootContainer {
 	width: 40%;
-	margin: 10vh auto;
-	background-color: #d6d6d6;
+	margin: 2vh auto;
 	padding: 2.5rem;
+	text-align: center;
+	-webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	background-color: #ffffff;
+}
+
+#input {
+	border: 1px solid #000;
 }
 
 .RadioButtonsContainer {
@@ -11,6 +18,7 @@
 	padding: 8px;
 	background-color: #ffffff;
 	margin-bottom: 8px;
+	justify-content: space-between;
 }
 
 .RadioButtonsContainer div {

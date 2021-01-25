@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { BiBus } from 'react-icons/bi';
-import { BsCursor, BsHash } from 'react-icons/bs';
+import { BiBus, BiRupee } from 'react-icons/bi';
+import { BsCursor, BsHash, BsStopwatch } from 'react-icons/bs';
 import { GoLocation } from 'react-icons/go';
 import { MdDateRange } from 'react-icons/md';
 
@@ -16,7 +16,10 @@ class AddBusForm extends Component{
             number: '',
             startCity: '',
             endCity: '',
-            journeyDate: ''
+            journeyDate: '',
+            departureTime: '',
+            arrivalTime: '',
+            fare: ''
         },
         errorMessage: ''
     }
@@ -31,11 +34,10 @@ class AddBusForm extends Component{
 
     isFormValid = () => {
         const { name, number, startCity, endCity, journeyDate } = this.state.busInfo;
-        const res =  name.trim().length && number.trim().length && 
+        return  name.trim().length && number.trim().length && 
                 startCity.trim().length && endCity.trim().length && 
                 journeyDate.trim().length;
-        console.log(res);
-        return res;
+        
     }
 
     formSubmitHandler = async() => {
@@ -51,13 +53,16 @@ class AddBusForm extends Component{
             this.props.history.push('/error');
         }
         else{
-            this.props.viewAll();
+            return this.props.history.push({pathname:'/dashboard/view-all', data: {
+                bus: result.createdBus
+            }});
         }    
     }
 
     render(){
         return(
             <div className={classes.RootContainer}>
+                {/* <div></div> */}
                 <div className={classes.InputContainer}>
                     <BiBus size={20}/>
                     <input 
@@ -74,6 +79,15 @@ class AddBusForm extends Component{
                         name='number'
                         placeholder='Bus Number'
                         value={this.state.busInfo.number}
+                        onChange={this.inputChangeHandler} />
+                </div>
+                <div className={classes.InputContainer}>
+                    <BiRupee size={20} />
+                    <input 
+                        type='text'
+                        name='fare'
+                        placeholder='Ticket Price'
+                        value={this.state.busInfo.fare}
                         onChange={this.inputChangeHandler} />
                 </div>
                 <div className={classes.InputContainer}>
@@ -101,6 +115,26 @@ class AddBusForm extends Component{
                         name='journeyDate'
                         placeholder='Date'
                         value={this.state.busInfo.journeyDate}
+                        onChange={this.inputChangeHandler}
+                        style={{color: 'grey', outline: 'none'}} />
+                </div>
+                <div className={classes.InputContainer}>
+                    <BsStopwatch size={20} />
+                    <span>Departure time: </span>
+                    <input 
+                        type='time'
+                        name='departureTime'
+                        value={this.state.busInfo.departureTime}
+                        onChange={this.inputChangeHandler}
+                        style={{color: 'grey', outline: 'none'}} />
+                </div>
+                <div className={classes.InputContainer}>
+                    <BsStopwatch size={20} />
+                    <span>Arrival time: </span>
+                    <input 
+                        type='time'
+                        name='arrivalTime'
+                        value={this.state.busInfo.arrivalTime}
                         onChange={this.inputChangeHandler}
                         style={{color: 'grey', outline: 'none'}} />
                 </div>

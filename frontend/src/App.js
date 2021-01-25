@@ -27,8 +27,8 @@ class App extends Component{
 
   logoutHandler = () => {
     this.props.setStatusToLogout();
-    this.props.history.push('/');
-    <Redirect to='/'/>
+    return this.props.history.push('/login');
+    // <Redirect to='/'/>
   }
 
   render(){
@@ -36,15 +36,15 @@ class App extends Component{
     return (
       <BrowserRouter>
         <div className={classes.RootContainer}>
-          <Navbar isAuth={isAuth} logoutHandler={this.logoutHandler} userInfo={this.props.userInfo}/>
+          <Navbar isAuth={isAuth} userInfo={this.props.userInfo} logoutHandler={this.logoutHandler} />
           <div className={classes.ContentContainer}>
             <Switch>
               {!isAuth ? <Route exact path='/signup' component={Signup}/> : null }
               {!isAuth ? <Route exact path='/login' component={Login} /> : null }
-              {isAuth ? <Route exact path='/dashboard' component={MainSection} /> : null }
+              {isAuth ? <Route path='/dashboard' component={MainSection} /> : null }
               {isAuth ? <Route path='/bus-details/:busId' component={BusDetails} isAdmin={this.props.userInfo.isAdmin} /> : null }
               <Route exact path='/error' component={Error} />
-              <Route path='/' component={HomePage} />
+              <Route path='/' component={Login} />
             </Switch>
           </div>
         </div>

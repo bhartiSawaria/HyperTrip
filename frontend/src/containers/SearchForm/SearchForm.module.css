@@ -1,19 +1,22 @@
 .RootContainer {
 	width: 100%;
 	background-color: #eee;
-
+	margin: auto;
 	padding: 2rem 0;
 }
 
 .FormContainer {
 	width: 70%;
 	margin: auto;
+	padding: 2rem 4rem;
+	-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .InputContainer {
 	padding: 1rem;
 	background-color: #ffffff;
-	width: 50%;
+	width: 100%;
 	margin: 1rem auto;
 	border-radius: 25px;
 	text-align: start;
@@ -28,6 +31,7 @@
 	border: 0px;
 	vertical-align: middle;
 	margin-left: 12px;
+	outline: none;
 }
 
 .FormContainer > button {

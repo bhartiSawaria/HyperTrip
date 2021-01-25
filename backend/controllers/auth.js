@@ -7,23 +7,22 @@ const { SECRET } = require('../keyInfo');
 const User = require('../models/user');
 
 exports.postSignup = async(req, res, next) => {
-    const errors = validationResult(req);
-    if( !errors.isEmpty() ){
-        const err = new Error('Sign up failed!');
-        err.data = errors.array(); 
-        err.statusCode = 422;
-        console.log('error occured');
-        return next(err);
-    }
-
-    const name = req.body.name;
-    const email = req.body.email;
-    const phoneNo = parseInt(req.body.phoneNo);
-    const gender = req.body.gender;
-    const password = req.body.password;
-    const isAdmin = req.body.isAdmin === 'true' ? true : false;
-
     try{
+        const errors = validationResult(req);
+        if( !errors.isEmpty() ){
+            const err = new Error('Sign up failed!');
+            err.data = errors.array(); 
+            err.statusCode = 422;
+            throw err;
+        }
+
+        const name = req.body.name;
+        const email = req.body.email;
+        const phoneNo = parseInt(req.body.phoneNo);
+        const gender = req.body.gender;
+        const password = req.body.password;
+        const isAdmin = req.body.isAdmin === 'true' ? true : false;
+    
         const hashPassword = await bcrypt.hash(password, 12);
         const user = new User({
             name: name,
@@ -36,6 +35,7 @@ exports.postSignup = async(req, res, next) => {
         const createdUser = await user.save();
         res.status(201).json({
             message: 'Signed up successfully.',
+            success: true,
             user: createdUser
         })
     }
@@ -52,7 +52,7 @@ exports.postLogin = async(req, res, next) => {
         const err = new Error('Login failed!');
         err.statusCode = 422;
         err.data = errors.array();
-        return next(err);
+        next(err);
     }
 
     const email = req.body.email;
@@ -66,6 +66,7 @@ exports.postLogin = async(req, res, next) => {
 
         res.status(200).json({
             token: token, 
+            success: true,
             userDetails: {
                 id: currentUser._id, 
                 name: currentUser.name, 

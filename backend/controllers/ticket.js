@@ -3,7 +3,7 @@ const ticketUtils = require('../database/ticket');
 const busUtils = require('../database/bus');
 
 exports.postBookTicket = async(req, res, next) => {
-    try{
+    try{ 
         const busInfo = req.body.busId;
         const bookedBy = req.userId;
         const selectedSeats = [...req.body.selectedSeats];
@@ -27,6 +27,16 @@ exports.postBookTicket = async(req, res, next) => {
             message: 'Tickets booked successfully',
             success: true
         });
+    }
+    catch(error){
+        error.setStatus = 500;
+        next(error);
+    }
+}
+
+exports.getOwnerOfTicket = async(req, res, next) => {
+    try{
+        
     }
     catch(error){
         error.setStatus = 500;

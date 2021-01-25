@@ -45,26 +45,28 @@ class Login extends Component{
         this.setState({userInfo: updatedUserInfo});
     }
 
-    formSubmitHandler = (event) => {
+    formSubmitHandler = async(event) => {
         event.preventDefault();
         if( this.isFormValid() ){
             this.setState({isLoading: true});
-            fetcher('/login', 'POST', JSON.stringify(this.state.userInfo))
-            .then(result => {
-                if( result.data ){
-                    this.setState({error: result.data[0].msg});
+            try{
+                const result = await fetcher('/login', 'POST', JSON.stringify(this.state.userInfo));
+                console.log(result);
+                if(!result.success){
+                    if(result.data)
+                    this.setState({error: result.data[0].msg, isLoading: false});
                 }
                 else{
                     this.props.setStatusToLogin(result.userDetails, result.token);
                     console.log('Login result', result);
                     this.props.history.push('/dashboard');
                 }
-            }) 
-            .catch(err => {
+            }
+            catch(err){
                 this.setState({isLoading: false, isLogin: false});
                 console.log('Error in login frontend ', err);
                 this.props.history.push('/error');
-            });
+            }
         }
     }
 
@@ -98,13 +100,34 @@ class Login extends Component{
                         value={this.state.password}
                         onChange={this.formInputChangeHandler}/>
 
+                    <div style={{textAlign: 'left'}} className={classes.RadioButtonsContainer}>
+                        <div>
+                            <input 
+                                type='radio' 
+                                id='admin' 
+                                name='isAdmin'
+                                value={true}
+                                onClick={this.formInputChangeHandler} />
+                            <label for='admin'>Admin</label>
+                        </div>
+                        <div>
+                            <input 
+                                type='radio' 
+                                id='user' 
+                                name='isAdmin'
+                                value={false}
+                                onClick={this.formInputChangeHandler} />
+                            <label for='user'>User</label>
+                        </div>
+                    </div> 
+
                     {error}
 
                     <Button 
                         fluid 
                         loading={this.state.isLoading}
                         color='green' 
-                        style={{margin: '2rem auto'}}
+                        style={{margin: '2rem auto', backgroundColor: '#ef5350'}}
                         onClick={this.formSubmitHandler}>Submit       
                     </Button>
 

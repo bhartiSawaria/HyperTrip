@@ -95,31 +95,30 @@ class Signup extends Component{
         this.setState({error: ''});
         const updatedUserInfo = {...this.state.userInfo};
         updatedUserInfo[event.target.name] = event.target.value;
-        this.setState({userInfo: updatedUserInfo},() => {
-            console.log('State is ', this.state.userInfo);
-        });   
+        this.setState({userInfo: updatedUserInfo});   
     }
 
-    formSubmitHandler = (event) => {
+    formSubmitHandler = async(event) => {
         event.preventDefault();
         if( this.isFormValid() ){
             this.setState({isLoading: true});
-            fetcher('/signup', 'POST', JSON.stringify(this.state.userInfo))
-            .then(result => {
-                if( result.data ){
-                    this.setState({error: result.data[0].msg});
+            try{
+                const result = await fetcher('/signup', 'POST', JSON.stringify(this.state.userInfo));
+                console.log(result);
+                if(!result.success){
+                    console.log('here');
+                    this.setState({error: result.data[0].msg, isLoading: false});
                 }
                 else{
-                    console.log('Login result', result);
+                    this.setState({isLoading: false});
                     this.props.history.push('/login');
                 }
-                this.setState({isLoading: false});
-            })
-            .catch(err => {
+            }
+            catch(err) {
                 this.setState({isLoading: false});
                 console.log('Error in signup frontend ', err);
                 this.props.history.push('/error');
-            });
+            };
         }
     }
 
@@ -154,7 +153,7 @@ class Signup extends Component{
                     
                     <Form.Input
                         fluid
-                        icon='phoneNo'
+                        icon='phone'
                         iconPosition='left' 
                         name='phoneNo'
                         type='text'
@@ -239,7 +238,7 @@ class Signup extends Component{
                         fluid 
                         color='green'
                         loading={this.state.isLoading} 
-                        style={{margin: '2rem auto'}} 
+                        style={{margin: '2rem auto', backgroundColor: '#ef5350'}} 
                         onClick={this.formSubmitHandler}>Submit</Button>
 
                     <p>Already have an account? <Link to='/login'>Login</Link></p>

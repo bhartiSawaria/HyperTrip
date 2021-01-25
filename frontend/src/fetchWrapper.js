@@ -40,20 +40,21 @@ const fetcher = async(path, method, body = null, isFormData = false) => {
             }
         }
     }
-    let result;
+    let result, finalResult;
 
     try{
-       result = await fetch( BASE_URL + path, payload );
+        result = await fetch( BASE_URL + path, payload );
 
-       if(!(result.status === 200 || result.status === 201)){
+        finalResult = await result.json();
+        console.log(finalResult);
+        if(!(result.status === 200 || result.status === 201)){
            throw new Error('Error occurred!!');
-       }
-       const finalResult = await result.json();
-       return finalResult;
+        }
+        return finalResult;
     }
     catch(error){
         console.log('Error is', error);
-        return result;
+        return finalResult;
     } 
 }
 
