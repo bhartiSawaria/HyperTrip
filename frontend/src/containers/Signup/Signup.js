@@ -106,7 +106,6 @@ class Signup extends Component{
                 const result = await fetcher('/signup', 'POST', JSON.stringify(this.state.userInfo));
                 console.log(result);
                 if(!result.success){
-                    console.log('here');
                     this.setState({error: result.data[0].msg, isLoading: false});
                 }
                 else{

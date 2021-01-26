@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const { SECRET } = require('../keyInfo');
-const User = require('../models/user');
+const userUtils = require('../database/user');
 
 exports.postSignup = async(req, res, next) => {
     try{
@@ -24,15 +24,15 @@ exports.postSignup = async(req, res, next) => {
         const isAdmin = req.body.isAdmin === 'true' ? true : false;
     
         const hashPassword = await bcrypt.hash(password, 12);
-        const user = new User({
+        const user = {
             name: name,
             email: email,
             phoneNo: phoneNo,
             gender: gender,
             password: hashPassword,
             isAdmin: isAdmin
-        });
-        const createdUser = await user.save();
+        };
+        const createdUser = await userUtils.createUser(user);
         res.status(201).json({
             message: 'Signed up successfully.',
             success: true,
@@ -47,18 +47,18 @@ exports.postSignup = async(req, res, next) => {
 }
 
 exports.postLogin = async(req, res, next) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        const err = new Error('Login failed!');
-        err.statusCode = 422;
-        err.data = errors.array();
-        next(err);
-    }
-
-    const email = req.body.email;
-
     try{
-        const currentUser = await User.findOne({email: email});
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            const err = new Error('Login failed!');
+            err.statusCode = 422;
+            err.data = errors.array();
+            throw err;
+        }
+
+        const email = req.body.email;
+    
+        const currentUser = await userUtils.findUserWithEmail(email);
         const token = jwt.sign({
             email: email,
             userId: currentUser._id

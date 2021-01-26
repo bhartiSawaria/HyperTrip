@@ -3,8 +3,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const { body } = require('express-validator/check');
 
-const User = require('../models/user');
 const authControllers = require('../controllers/auth');
+const userUtils = require('../database/user');
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.post('/signup', [
         .isEmail()
         .withMessage('Please enter a valid email.')
         .custom((value, {req}) => {
-            return User.findOne({email: value}).then(user => {
+            return userUtils.findUserWithEmail({email: value}).then(user => {
                 if(user){
                     return Promise.reject('Email address already registered!');
                 }
@@ -38,7 +38,7 @@ router.post('/signup', [
 router.post('/login', [
     body('email')
         .custom((value, {req}) => {
-            return User.findOne({email: value}).then(user => {
+            return userUtils.findUserWithEmail({email: value}).then(user => {
                 if(!user){
                     return Promise.reject('This E-mail is not registered.');
                 }
@@ -47,7 +47,7 @@ router.post('/login', [
 
     body('password')
         .custom((value, {req}) => {
-            return User.findOne({email: req.body.email}).then(user => {
+            return userUtils.findUserWithEmail({email: req.body.email}).then(user => {
                 if(user){
                     return bcrypt
                             .compare(value, user.password)
